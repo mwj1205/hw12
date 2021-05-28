@@ -250,7 +250,7 @@ int bubbleSort(int *a) // 버블정렬. 더 큰 값을 뒤로 옮기며 나아간다.
 	return 0;
 }
 
-int shellSort(int *a)
+int shellSort(int *a) // 셸 정렬. 일정 간격만큼 떨어진 array와 비교해 삽입정렬
 {
 	int i, j, k, h, v;
 
@@ -259,15 +259,15 @@ int shellSort(int *a)
 
 	printArray(a); // 정렬되기 전 배열 출력
 
-	for (h = MAX_ARRAY_SIZE/2; h > 0; h /= 2)
+	for (h = MAX_ARRAY_SIZE/2; h > 0; h /= 2) // 초기 간격은 크기/2, /2씩 줄여나감
 	{
-		for (i = 0; i < h; i++)
+		for (i = 0; i < h; i++) // h만큼 떨어진 array끼리 배열
 		{
-			for(j = i + h; j < MAX_ARRAY_SIZE; j += h)
+			for(j = i + h; j < MAX_ARRAY_SIZE; j += h) // 앞에 있는 data가 더 크다면 자리 바꿈
 			{
 				v = a[j];
 				k = j;
-				while (k > h-1 && a[k-h] > v)
+				while (k > h-1 && a[k-h] > v) 
 				{
 					a[k] = a[k-h];
 					k -= h;
@@ -282,31 +282,33 @@ int shellSort(int *a)
 	return 0;
 }
 
-int quickSort(int *a, int n) // 퀵 정렬
+int quickSort(int *a, int n) // 퀵 정렬. pivot을 기준으로 왼쪽 오른쪽으로 나누어 정렬
 {
 	int v, t;
 	int i, j;
 
 	if (n > 1)
 	{
-		v = a[n-1];
+		v = a[n-1]; // pivot 설정 (맨 뒤에 있는 data)
 		i = -1;
 		j = n - 1;
 
 		while(1)
 		{
-			while(a[++i] < v);
-			while(a[--j] > v);
+			while(a[++i] < v); // pivot보다 큰 데이터 탐색
+			while(a[--j] > v); // pivot보다 작은 데이터 탐색
 
-			if (i >= j) break;
+			if (i >= j) break; // i가 j보다 크거나 같으면 탈출
+			/* 아니라면 a[i]와 a[j] 자리 swap */
 			t = a[i];
 			a[i] = a[j];
 			a[j] = t;
 		}
+		/* a[i]와 pivot 자리 swap 여기서 고정된 pivot은 최종 pivot의 자리임 */
 		t = a[i];
 		a[i] = a[n-1];
 		a[n-1] = t;
-
+		/* pivot 기준 왼쪽 오른쪽에 대해 반복 */
 		quickSort(a, i);
 		quickSort(a+i+1, n-i-1);
 	}
@@ -331,7 +333,7 @@ int hashing(int *a, int **ht)
 		hashtable = *ht;	/* hash table이 NULL이 아닌경우, table 재활용, reset to -1 */
 	}
 
-	for(int i = 0; i < MAX_HASH_TABLE_SIZE; i++)
+	for(int i = 0; i < MAX_HASH_TABLE_SIZE; i++) // hash table -1로 초기화
 		hashtable[i] = -1;
 
 	/*
@@ -345,25 +347,25 @@ int hashing(int *a, int **ht)
 	for (int i = 0; i < MAX_ARRAY_SIZE; i++)
 	{
 		key = a[i];
-		hashcode = hashCode(key);
+		hashcode = hashCode(key); // 해시 함수에서 key에 맞는 위치 받아옴
 		/*
 		printf("key = %d, hashcode = %d, hashtable[%d]=%d\n", key, hashcode, hashcode, hashtable[hashcode]);
 		*/
-		if (hashtable[hashcode] == -1)
+		if (hashtable[hashcode] == -1) // key를 넣고자 하는 위치가 비어있으면
 		{
-			hashtable[hashcode] = key;
-		} else 	{
+			hashtable[hashcode] = key; // 위치에 삽입
+		} else 	{ // 넣고자 하는 위치가 비어있지 않아서 오버플로우가 일어났다면
 
 			index = hashcode;
 
-			while(hashtable[index] != -1)
+			while(hashtable[index] != -1) // 다음 인덱스로 넘어가며 빈 곳 검색
 			{
 				index = (++index) % MAX_HASH_TABLE_SIZE;
 				/*
 				printf("index = %d\n", index);
 				*/
 			}
-			hashtable[index] = key;
+			hashtable[index] = key; // 빈 곳에 키 삽입
 		}
 	}
 
@@ -372,12 +374,12 @@ int hashing(int *a, int **ht)
 
 int search(int *ht, int key)
 {
-	int index = hashCode(key);
+	int index = hashCode(key); // 해시 함수로 위치 받아옴
 
-	if(ht[index] == key)
+	if(ht[index] == key) // 받아온 위치에 원하는 키가 있다면 리턴
 		return index;
 
-	while(ht[++index] != key)
+	while(ht[++index] != key) // 없다면 인덱스 증가시키며 탐색
 	{
 		index = index % MAX_HASH_TABLE_SIZE;
 	}
