@@ -86,10 +86,10 @@ int main()
 		case 'k': case 'K':
 			printf("Quick Sort: \n");
 			printf("----------------------------------------------------------------\n");
-			printArray(array);
+			printArray(array); // 정렬되기 전 배열 출력
 			quickSort(array, MAX_ARRAY_SIZE);
 			printf("----------------------------------------------------------------\n");
-			printArray(array);
+			printArray(array); // 정렬 된 후의 배열 출력
 
 			break;
 
@@ -141,28 +141,28 @@ int initialize(int** a)
 }
 
 int freeArray(int *a)
-{
+{ /* 동적 할당된 메모리 해제 */
 	if(a != NULL)
 		free(a);
 	return 0;
 }
 
-void printArray(int *a)
+void printArray(int *a) // 배열 출력
 {
-	if (a == NULL) {
+	if (a == NULL) { 
 		printf("nothing to print.\n");
 		return;
 	}
-	for(int i = 0; i < MAX_ARRAY_SIZE; i++)
+	for(int i = 0; i < MAX_ARRAY_SIZE; i++) // array number 출력
 		printf("a[%02d] ", i);
 	printf("\n");
-	for(int i = 0; i < MAX_ARRAY_SIZE; i++)
+	for(int i = 0; i < MAX_ARRAY_SIZE; i++) // 배열에 들어있는 데이터 출력
 		printf("%5d ", a[i]);
 	printf("\n");
 }
 
 
-int selectionSort(int *a)
+int selectionSort(int *a) // 선택 정렬. 리스트중 가장 작은 값을 맨 앞에 삽입해나간다.
 {
 	int min;
 	int minindex;
@@ -171,70 +171,71 @@ int selectionSort(int *a)
 	printf("Selection Sort: \n");
 	printf("----------------------------------------------------------------\n");
 
-	printArray(a);
+	printArray(a); // 정렬되기 전 배열 출력
 
 	for (i = 0; i < MAX_ARRAY_SIZE; i++)
 	{
-		minindex = i;
-		min = a[i];
+		minindex = i; // 정렬되지 않은 부분의 가장 앞
+		min = a[i]; // 정렬되지 않은 부분의 가장 앞에 들어있는 데이터
 		for(j = i+1; j < MAX_ARRAY_SIZE; j++)
 		{
-			if (min > a[j])
+			if (min > a[j]) // 리스트에서 더 작은 값 찾으면
 			{
-				min = a[j];
-				minindex = j;
+				min = a[j]; // 가장 작은 값
+				minindex = j; // 가장 작은 값이 들어있는 array number 변경
 			}
 		}
+		/* 가장 작은 값과 맨 앞의 값 swap */
 		a[minindex] = a[i];
 		a[i] = min;
 	}
 
 	printf("----------------------------------------------------------------\n");
-	printArray(a);
+	printArray(a); // 정렬 된 후의 배열 출력
 	return 0;
 }
 
-int insertionSort(int *a)
+int insertionSort(int *a) // 삽입 정렬. 작은 값을 앞으로 옮겨나간다
 {
 	int i, j, t;
 
 	printf("Insertion Sort: \n");
 	printf("----------------------------------------------------------------\n");
 
-	printArray(a);
+	printArray(a); // 정렬되기 전 배열 출력
 
 	for(i = 1; i < MAX_ARRAY_SIZE; i++)
 	{
-		t = a[i];
-		j = i;
-		while (a[j-1] > t && j > 0)
+		t = a[i]; // 기준이 되는 데이터를 저장한다
+		j = i; // 검색을 시작할 array number
+		while (a[j-1] > t && j > 0) // 기준 데이터보다 앞쪽에 있는 데이터의 크기가 클동안
 		{
-			a[j] = a[j-1];
-			j--;
+			a[j] = a[j-1]; // 큰 데이터를 한 칸 뒤로 옮긴다.
+			j--; // array 앞으로 한칸 이동
 		}
-		a[j] = t;
+		a[j] = t; // 기준이 되었던 데이터를 위치에 삽입한다
 	}
 
 	printf("----------------------------------------------------------------\n");
-	printArray(a);
+	printArray(a); // 정렬 된 후의 배열 출력
 
 	return 0;
 }
 
-int bubbleSort(int *a)
+int bubbleSort(int *a) // 버블정렬. 더 큰 값을 뒤로 옮기며 나아간다.
 {
 	int i, j, t;
 
 	printf("Bubble Sort: \n");
 	printf("----------------------------------------------------------------\n");
 
-	printArray(a);
+	printArray(a); // 정렬되기 전 배열 출력
 
 	for(i = 0; i < MAX_ARRAY_SIZE; i++)
 	{
 		for (j = 0; j < MAX_ARRAY_SIZE; j++)
 		{
-			if (a[j-1] > a[j])
+			if (a[j-1] > a[j]) // 앞에 있는 데이터가 바로 뒤에 있는 데이터보다 크다면 swap
 			{
 				t = a[j-1];
 				a[j-1] = a[j];
@@ -244,7 +245,7 @@ int bubbleSort(int *a)
 	}
 
 	printf("----------------------------------------------------------------\n");
-	printArray(a);
+	printArray(a); // 정렬 된 후의 배열 출력
 
 	return 0;
 }
@@ -256,7 +257,7 @@ int shellSort(int *a)
 	printf("Shell Sort: \n");
 	printf("----------------------------------------------------------------\n");
 
-	printArray(a);
+	printArray(a); // 정렬되기 전 배열 출력
 
 	for (h = MAX_ARRAY_SIZE/2; h > 0; h /= 2)
 	{
@@ -276,12 +277,12 @@ int shellSort(int *a)
 		}
 	}
 	printf("----------------------------------------------------------------\n");
-	printArray(a);
+	printArray(a); // 정렬 된 후의 배열 출력
 
 	return 0;
 }
 
-int quickSort(int *a, int n)
+int quickSort(int *a, int n) // 퀵 정렬
 {
 	int v, t;
 	int i, j;
